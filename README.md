@@ -5,7 +5,7 @@
 ## 🚀 주요 기능
 
 - **실시간 환율**: 한국수출입은행 공식 환율 데이터 사용
-- **22개 통화 지원**: USD, EUR, JPY, CNY, HKD, TWD, THB, VND, PHP, RUB, GBP, AUD, CAD, CHF, SGD, NZD, SEK, NOK, DKK, MYR, IDR
+- **35개 통화 지원**: 주요 통화(USD, EUR, JPY, CNY, GBP, HKD, SGD, AUD, CAD, CHF, NZD), 아시아 통화(TWD, THB, MYR, IDR, PHP, VND), 중동 통화(AED, SAR, KWD, BHD), 유럽 통화(SEK, NOK, DKK), 기타 통화(RUB, XOF), 폐지된 통화(ATS, BEF, DEM, ESP, FIM, FRF, ITL, NLG)
 - **계산기 기능**: 완전한 계산기 키패드로 금액 입력
 - **통화 교체**: 상단/하단 교체 버튼으로 직관적인 통화 변경
 - **한국어 지원**: 모든 UI가 한국어로 표시
