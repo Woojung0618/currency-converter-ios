@@ -304,9 +304,29 @@ struct ContentView: View {
     }
     
     private func swapCurrencies() {
+        // 현재 입력된 금액을 저장
+        guard let currentAmount = Double(displayValue) else { return }
+        
+        // 현재 통화로 변환된 금액을 계산 (fromCurrency -> toCurrency)
+        let convertedAmount = exchangeRateService.convert(amount: currentAmount, from: fromCurrency.code, to: toCurrency.code)
+        
+        // 통화 교체
         let temp = fromCurrency
         fromCurrency = toCurrency
         toCurrency = temp
+        
+        // 변환된 금액을 새로운 입력값으로 설정
+        displayValue = String(format: "%.2f", convertedAmount)
+        
+        // 소수점이 .00으로 끝나는 경우 정수로 표시
+        if displayValue.hasSuffix(".00") {
+            displayValue = String(format: "%.0f", convertedAmount)
+        }
+        
+        // 계산기 상태 초기화
+        currentOperation = nil
+        previousValue = nil
+        shouldResetDisplay = true  // 새로운 입력이 기존 값을 대체하도록 설정
     }
 }
 
