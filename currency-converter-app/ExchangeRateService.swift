@@ -21,6 +21,7 @@ class ExchangeRateService: ObservableObject {
     @Published var lastUpdated: Date = Date()
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var isOffline = false
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -28,13 +29,25 @@ class ExchangeRateService: ObservableObject {
     private let apiKey = Config.koreaEximApiKey
     private let baseURL = Config.koreaEximBaseURL
     
+    // UserDefaults 키
+    private let savedRatesKey = "SavedExchangeRates"
+    private let savedLastUpdatedKey = "SavedLastUpdated"
+    
     init() {
+        // 저장된 환율 데이터가 있으면 로드, 없으면 기본값 설정
+        if hasSavedRates() {
+            loadSavedRates()
+        } else {
+            loadMockRates()
+        }
+        // 그 다음 최신 환율 데이터 로드 시도
         loadExchangeRates()
     }
     
     func loadExchangeRates() {
         isLoading = true
         errorMessage = nil
+        isOffline = false
         
         // 오늘 날짜를 YYYYMMDD 형식으로 변환
         let dateFormatter = DateFormatter()
@@ -57,6 +70,7 @@ class ExchangeRateService: ObservableObject {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.timeoutInterval = 10 // 10초 타임아웃 설정
         
         URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
@@ -69,7 +83,7 @@ class ExchangeRateService: ObservableObject {
                     case .finished:
                         break
                     case .failure(let error):
-                        self.handleError("환율 데이터를 가져오는데 실패했습니다: \(error.localizedDescription)")
+                        self.handleError(error)
                     }
                 },
                 receiveValue: { response in
@@ -226,14 +240,96 @@ class ExchangeRateService: ObservableObject {
         
         self.rates = newRates
         self.lastUpdated = Date()
+        
+        // 성공적으로 환율 데이터를 받아오면 로컬에 저장
+        saveRatesToLocal(newRates)
+    }
+    
+    // MARK: - Local Storage Methods
+    
+    private func saveRatesToLocal(_ rates: [String: Double]) {
+        let userDefaults = UserDefaults.standard
+        
+        // 환율 데이터를 JSON으로 변환하여 저장
+        if let ratesData = try? JSONEncoder().encode(rates) {
+            userDefaults.set(ratesData, forKey: savedRatesKey)
+        }
+        
+        // 마지막 업데이트 시간 저장
+        userDefaults.set(lastUpdated, forKey: savedLastUpdatedKey)
+    }
+    
+    private func loadSavedRates() {
+        let userDefaults = UserDefaults.standard
+        
+        // 저장된 환율 데이터 로드
+        if let ratesData = userDefaults.data(forKey: savedRatesKey),
+           let savedRates = try? JSONDecoder().decode([String: Double].self, from: ratesData) {
+            self.rates = savedRates
+        }
+        
+        // 저장된 마지막 업데이트 시간 로드
+        if let savedDate = userDefaults.object(forKey: savedLastUpdatedKey) as? Date {
+            self.lastUpdated = savedDate
+        }
+    }
+    
+    private func hasSavedRates() -> Bool {
+        let userDefaults = UserDefaults.standard
+        return userDefaults.data(forKey: savedRatesKey) != nil
+    }
+    
+    private func handleError(_ error: Error) {
+        DispatchQueue.main.async {
+            self.isLoading = false
+            
+            // 오류 타입에 따른 사용자 친화적 메시지 생성
+            let errorMessage: String
+            let isOfflineMode: Bool
+            
+            if let urlError = error as? URLError {
+                switch urlError.code {
+                case .notConnectedToInternet, .networkConnectionLost:
+                    errorMessage = "오프라인 상태입니다.\n이전 환율 정보 기반으로 계산됩니다."
+                    isOfflineMode = true
+                case .timedOut:
+                    errorMessage = "서버 응답 시간 초과. 이전 환율 정보를 사용합니다."
+                    isOfflineMode = false
+                case .cannotFindHost, .cannotConnectToHost:
+                    errorMessage = "서버에 연결할 수 없습니다. 이전 환율 정보를 사용합니다."
+                    isOfflineMode = false
+                default:
+                    errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+                    isOfflineMode = false
+                }
+            } else {
+                errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+                isOfflineMode = false
+            }
+            
+            self.errorMessage = errorMessage
+            self.isOffline = isOfflineMode
+            
+            // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
+            if self.hasSavedRates() {
+                self.loadSavedRates()
+            } else {
+                self.loadMockRates()
+            }
+        }
     }
     
     private func handleError(_ message: String) {
         DispatchQueue.main.async {
             self.errorMessage = message
             self.isLoading = false
-            // 오류 발생 시 기본값 사용
-            self.loadMockRates()
+            self.isOffline = false
+            // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
+            if self.hasSavedRates() {
+                self.loadSavedRates()
+            } else {
+                self.loadMockRates()
+            }
         }
     }
     
@@ -306,5 +402,55 @@ class ExchangeRateService: ObservableObject {
     
     func refreshRates() {
         loadExchangeRates()
+    }
+    
+    // 테스트용: 강제로 오프라인 상태 시뮬레이션
+    func simulateOfflineMode() {
+        isLoading = true
+        errorMessage = nil
+        isOffline = false
+        
+        // 2초 후 오프라인 상태 시뮬레이션
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.isLoading = false
+            self.errorMessage = "오프라인 상태입니다.\n이전 환율 정보 기반으로 계산됩니다."
+            self.isOffline = true
+            
+            // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
+            if self.hasSavedRates() {
+                self.loadSavedRates()
+            } else {
+                self.loadMockRates()
+            }
+        }
+    }
+    
+    // 테스트용: 강제로 API 오류 시뮬레이션
+    func simulateApiError() {
+        isLoading = true
+        errorMessage = nil
+        isOffline = false
+        
+        // 2초 후 API 오류 시뮬레이션
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            self.isLoading = false
+            self.errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+            self.isOffline = false
+            
+            // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
+            if self.hasSavedRates() {
+                self.loadSavedRates()
+            } else {
+                self.loadMockRates()
+            }
+        }
+    }
+    
+    func getInfoMessage() -> String {
+        if isOffline {
+            return "오프라인 상태입니다."
+        } else {
+            return "온라인 상태입니다.\n실시간 환율 정보가 적용됩니다.\n(한국수출입 은행 환율 기준)"
+        }
     }
 }
