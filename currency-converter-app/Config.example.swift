@@ -6,13 +6,9 @@ import Foundation
 
 /*
 struct Config {
-    // MARK: - API Configuration
-    // 한국수출입은행 API 키를 여기에 입력하세요
-    // https://www.koreaexim.go.kr/ir/HPHKIR020M01?apino=2&viewtype=C&searchselect=&searchword=
-    static let koreaEximApiKey = "YOUR_ACTUAL_API_KEY_HERE"
-    
-    // MARK: - API URLs
-    static let koreaEximBaseURL = "https://oapi.koreaexim.go.kr/site/program/financial/exchangeJSON"
+    // MARK: - S3 Configuration
+    // S3에서 환율 데이터를 가져옵니다 (매일 오후 1시 업데이트)
+    static let s3ExchangeRateURL = "https://exchng-rate-bucket.s3.us-east-1.amazonaws.com/exchange_rate.json"
     
     // MARK: - App Configuration
     static let defaultFromCurrency = "KRW"

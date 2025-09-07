@@ -1,8 +1,14 @@
 import Foundation
 import Combine
 
-// 한국수출입은행 환율 API 응답 모델
-struct KoreaEximExchangeRateItem: Codable {
+// S3에서 받아오는 환율 데이터 모델
+struct S3ExchangeRateResponse: Codable {
+    let timestamp: String
+    let searchdate: String
+    let exchange_rates: [S3ExchangeRateItem]
+}
+
+struct S3ExchangeRateItem: Codable {
     let result: Int
     let cur_unit: String
     let ttb: String
@@ -25,9 +31,8 @@ class ExchangeRateService: ObservableObject {
     
     private var cancellables = Set<AnyCancellable>()
     
-    // 한국수출입은행 API 설정
-    private let apiKey = Config.koreaEximApiKey
-    private let baseURL = Config.koreaEximBaseURL
+    // S3 객체 URL 설정
+    private let s3URL = "https://exchng-rate-bucket.s3.us-east-1.amazonaws.com/exchange_rate.json"
     
     // UserDefaults 키
     private let savedRatesKey = "SavedExchangeRates"
@@ -49,20 +54,8 @@ class ExchangeRateService: ObservableObject {
         errorMessage = nil
         isOffline = false
         
-        // 오늘 날짜를 YYYYMMDD 형식으로 변환
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyyMMdd"
-        let today = dateFormatter.string(from: Date())
-        
-        // 한국수출입은행 환율정보조회 API 호출
-        var urlComponents = URLComponents(string: baseURL)
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "authkey", value: apiKey),
-            URLQueryItem(name: "searchdate", value: today),
-            URLQueryItem(name: "data", value: "AP01")
-        ]
-        
-        guard let url = urlComponents?.url else {
+        // S3 객체 URL에서 환율 데이터 가져오기
+        guard let url = URL(string: s3URL) else {
             handleError("잘못된 URL입니다.")
             return
         }
@@ -74,7 +67,7 @@ class ExchangeRateService: ObservableObject {
         
         URLSession.shared.dataTaskPublisher(for: request)
             .map(\.data)
-            .decode(type: [KoreaEximExchangeRateItem].self, decoder: JSONDecoder())
+            .decode(type: S3ExchangeRateResponse.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { completion in
@@ -87,13 +80,13 @@ class ExchangeRateService: ObservableObject {
                     }
                 },
                 receiveValue: { response in
-                    self.processExchangeRates(response)
+                    self.processExchangeRates(response.exchange_rates)
                 }
             )
             .store(in: &cancellables)
     }
     
-    private func processExchangeRates(_ response: [KoreaEximExchangeRateItem]) {
+    private func processExchangeRates(_ response: [S3ExchangeRateItem]) {
         var newRates: [String: Double] = [:]
         
         // KRW를 기준으로 환율 설정 (1 KRW = 1)
@@ -450,7 +443,7 @@ class ExchangeRateService: ObservableObject {
         if isOffline {
             return "오프라인 상태입니다."
         } else {
-            return "온라인 상태입니다.\n실시간 환율 정보가 적용됩니다.\n(한국수출입 은행 환율 기준)"
+            return "온라인 상태입니다.\n일일 업데이트 환율 정보가 적용됩니다.\n(한국수출입 은행 환율 기준)"
         }
     }
 }
