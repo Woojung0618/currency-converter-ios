@@ -8,6 +8,7 @@ S3에서 매일 업데이트되는 한국수출입은행 환율 데이터를 사
 - **35개 통화 지원**: 주요 통화(USD, EUR, JPY, CNY, GBP, HKD, SGD, AUD, CAD, CHF, NZD), 아시아 통화(TWD, THB, MYR, IDR, PHP, VND), 중동 통화(AED, SAR, KWD, BHD), 유럽 통화(SEK, NOK, DKK), 기타 통화(RUB, XOF), 폐지된 통화(ATS, BEF, DEM, ESP, FIM, FRF, ITL, NLG)
 - **계산기 기능**: 완전한 계산기 키패드로 금액 입력
 - **통화 교체**: 상단/하단 교체 버튼으로 직관적인 통화 변경
+- **다크모드 지원**: iOS 시스템 다크모드 설정을 자동으로 감지하고 적용
 - **한국어 지원**: 모든 UI가 한국어로 표시
 
 ## 📱 스크린샷
@@ -51,6 +52,7 @@ currency-converter-app/
 - **URLSession**: 네트워크 통신
 - **AWS S3**: 환율 데이터 저장소
 - **한국수출입은행 데이터**: 환율 데이터 소스
+- **다크모드 지원**: iOS 시스템 다크모드 자동 감지 및 적용
 
 ## 📄 라이선스
 

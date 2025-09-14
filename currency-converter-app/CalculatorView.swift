@@ -12,6 +12,8 @@ struct CalculatorView: View {
     let onDelete: () -> Void
     let onSwap: () -> Void
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack(spacing: 12) {
             // 상단 버튼들
@@ -112,6 +114,7 @@ struct CalculatorView: View {
             }
         }
         .padding()
+        .darkModeSupport()
     }
 }
 
@@ -120,6 +123,8 @@ struct CalculatorButton: View {
     let backgroundColor: Color
     let action: () -> Void
     let customContent: AnyView?
+    
+    @Environment(\.colorScheme) var colorScheme
     
     init(title: String, backgroundColor: Color = Color(.systemGray4), action: @escaping () -> Void) {
         self.title = title
@@ -148,7 +153,7 @@ struct CalculatorButton: View {
                     Text(title)
                         .font(.title2)
                         .fontWeight(.medium)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.calculatorButtonText(for: colorScheme))
                 }
             }
         }

@@ -19,6 +19,8 @@ struct ContentView: View {
     @State private var isSelectingFromCurrency = true
     @State private var showingInfoMessage = false
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var convertedValue: Double {
         guard let amount = Double(displayValue) else { return 0 }
         return exchangeRateService.convert(amount: amount, from: fromCurrency.code, to: toCurrency.code)
@@ -26,7 +28,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            Color(.systemGray6)
+            AppColors.groupedBackground(for: colorScheme)
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
@@ -47,7 +49,7 @@ struct ContentView: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color(.systemGray5))
+                            .background(AppColors.buttonBackground(for: colorScheme))
                             .cornerRadius(20)
                         }
                         
@@ -61,7 +63,7 @@ struct ContentView: View {
                                 .font(.title2)
                                 .foregroundColor(.orange)
                                 .padding(12)
-                                .background(Color(.systemGray5))
+                                .background(AppColors.buttonBackground(for: colorScheme))
                                 .clipShape(Circle())
                         }
                         
@@ -80,7 +82,7 @@ struct ContentView: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.vertical, 8)
-                            .background(Color(.systemGray5))
+                            .background(AppColors.buttonBackground(for: colorScheme))
                             .cornerRadius(20)
                         }
                     }
@@ -106,7 +108,7 @@ struct ContentView: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
-                        .background(Color(.systemBackground))
+                        .background(AppColors.cardBackground(for: colorScheme))
                         .cornerRadius(12)
                         .onTapGesture {
                             // 숫자 입력 모드 활성화
@@ -130,7 +132,7 @@ struct ContentView: View {
                         }
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
-                        .background(Color(.systemBackground))
+                        .background(AppColors.cardBackground(for: colorScheme))
                         .cornerRadius(12)
                     }
                     .padding(.horizontal)
@@ -161,7 +163,7 @@ struct ContentView: View {
                         swapCurrencies()
                     }
                 )
-                .background(Color(.systemBackground))
+                .background(AppColors.cardBackground(for: colorScheme))
                 .cornerRadius(20)
                 .padding(.horizontal, 8)
                 
@@ -258,12 +260,13 @@ struct ContentView: View {
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 12)
-                .background(Color(.systemBackground))
+                .background(AppColors.cardBackground(for: colorScheme))
             }
         }
         .sheet(isPresented: $showingCurrencySelection) {
             CurrencySelectionView(selectedCurrency: isSelectingFromCurrency ? $fromCurrency : $toCurrency)
         }
+        .darkModeSupport()
     }
     
     // MARK: - Helper Functions

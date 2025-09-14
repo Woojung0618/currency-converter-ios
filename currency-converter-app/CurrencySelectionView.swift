@@ -4,6 +4,7 @@ struct CurrencySelectionView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedCurrency: Currency
     @State private var searchText = ""
+    @Environment(\.colorScheme) var colorScheme
     
     var filteredCurrencies: [Currency] {
         if searchText.isEmpty {
@@ -27,7 +28,7 @@ struct CurrencySelectionView: View {
                         .textFieldStyle(PlainTextFieldStyle())
                 }
                 .padding()
-                .background(Color(.systemGray6))
+                .background(Color.appSystemGray6)
                 .cornerRadius(10)
                 .padding(.horizontal)
                 
@@ -70,5 +71,6 @@ struct CurrencySelectionView: View {
                 }
             }
         }
+        .darkModeSupport()
     }
 }
