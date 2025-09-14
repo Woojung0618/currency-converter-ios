@@ -26,6 +26,15 @@ struct ContentView: View {
         return exchangeRateService.convert(amount: amount, from: fromCurrency.code, to: toCurrency.code)
     }
     
+    // 메모리 최적화를 위한 계산된 속성 캐싱
+    private var cachedFormattedAmount: String {
+        formatNumber(Double(displayValue) ?? 0)
+    }
+    
+    private var cachedFormattedConverted: String {
+        formatNumber(convertedValue)
+    }
+    
     var body: some View {
         ZStack {
             AppColors.groupedBackground(for: colorScheme)
@@ -92,7 +101,7 @@ struct ContentView: View {
                     VStack(spacing: 16) {
                         // 입력 금액
                         HStack {
-                            Text(formatNumber(Double(displayValue) ?? 0))
+                            Text(cachedFormattedAmount)
                                 .font(.system(size: 32, weight: .medium))
                                 .foregroundColor(.primary)
                             
@@ -116,7 +125,7 @@ struct ContentView: View {
                         
                         // 변환된 금액
                         HStack {
-                            Text(formatNumber(convertedValue))
+                            Text(cachedFormattedConverted)
                                 .font(.system(size: 32, weight: .medium))
                                 .foregroundColor(.primary)
                             

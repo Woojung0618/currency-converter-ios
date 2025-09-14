@@ -49,7 +49,15 @@ class ExchangeRateService: ObservableObject {
         loadExchangeRates()
     }
     
+    deinit {
+        // 메모리 해제를 위해 cancellables 정리
+        cancellables.removeAll()
+    }
+    
     func loadExchangeRates() {
+        // 기존 네트워크 요청 취소 (메모리 누수 방지)
+        cancellables.removeAll()
+        
         isLoading = true
         errorMessage = nil
         isOffline = false
