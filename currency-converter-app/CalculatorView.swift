@@ -151,7 +151,7 @@ struct CalculatorButton: View {
                     customContent
                 } else {
                     Text(title)
-                        .font(.title2)
+                        .font(.title)
                         .fontWeight(.medium)
                         .foregroundColor(AppColors.calculatorButtonText(for: colorScheme))
                 }
