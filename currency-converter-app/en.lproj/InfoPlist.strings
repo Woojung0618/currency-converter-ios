@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings (English)
+  Currency Converter App
+*/
+
+// 앱 이름 (홈 화면에 표시)
+"CFBundleDisplayName" = "Currency Converter";
+
+// 앱 설명 (선택사항)
+"CFBundleName" = "Currency Converter";
