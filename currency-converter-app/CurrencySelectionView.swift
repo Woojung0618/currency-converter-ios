@@ -11,7 +11,7 @@ struct CurrencySelectionView: View {
             return Currency.allCurrencies
         } else {
             return Currency.allCurrencies.filter { currency in
-                currency.name.localizedCaseInsensitiveContains(searchText) ||
+                currency.localizedName.localizedCaseInsensitiveContains(searchText) ||
                 currency.code.localizedCaseInsensitiveContains(searchText)
             }
         }
@@ -24,7 +24,7 @@ struct CurrencySelectionView: View {
                 HStack {
                     Image(systemName: "magnifyingglass")
                         .foregroundColor(.gray)
-                    TextField("검색", text: $searchText)
+                    TextField(NSLocalizedString("search", comment: ""), text: $searchText)
                         .textFieldStyle(PlainTextFieldStyle())
                 }
                 .padding()
@@ -39,7 +39,7 @@ struct CurrencySelectionView: View {
                             .font(.title2)
                         
                         VStack(alignment: .leading) {
-                            Text(currency.name)
+                            Text(currency.localizedName)
                                 .font(.body)
                                 .foregroundColor(.primary)
                             Text(currency.code)
@@ -57,7 +57,7 @@ struct CurrencySelectionView: View {
                 }
                 .listStyle(PlainListStyle())
             }
-            .navigationTitle("통화")
+            .navigationTitle(NSLocalizedString("currency", comment: ""))
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden(true)
             .toolbar {

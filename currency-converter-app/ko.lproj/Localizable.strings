@@ -1,0 +1,62 @@
+/* 
+  Localizable.strings (Korean)
+  Currency Converter App
+*/
+
+// MARK: - General UI
+"search" = "검색";
+"currency" = "통화";
+"offline" = "오프라인";
+"online" = "온라인";
+"information" = "정보";
+
+// MARK: - Exchange Rate Messages
+"offline_status" = "오프라인 상태입니다.";
+"online_status" = "온라인 상태입니다.\n일일 업데이트 환율 정보가 적용됩니다.\n(한국수출입 은행 환율 기준)";
+"offline_message" = "오프라인 상태입니다.\n이전 환율 정보 기반으로 계산됩니다.";
+"timeout_message" = "서버 응답 시간 초과. 이전 환율 정보를 사용합니다.";
+"connection_error" = "서버에 연결할 수 없습니다. 이전 환율 정보를 사용합니다.";
+"fetch_error" = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다.";
+"invalid_url" = "잘못된 URL입니다.";
+
+// MARK: - Currency Names (Korean)
+"currency_krw" = "대한민국 원";
+"currency_usd" = "미국 달러";
+"currency_eur" = "유로";
+"currency_jpy" = "일본 엔화";
+"currency_cny" = "중국 위안화";
+"currency_gbp" = "영국 파운드";
+"currency_hkd" = "홍콩 달러";
+"currency_sgd" = "싱가포르 달러";
+"currency_aud" = "호주 달러";
+"currency_cad" = "캐나다 달러";
+"currency_chf" = "스위스 프랑";
+"currency_nzd" = "뉴질랜드 달러";
+"currency_twd" = "신 타이완 달러";
+"currency_thb" = "태국 바트";
+"currency_myr" = "말레이지아 링기트";
+"currency_idr" = "인도네시아 루피아";
+"currency_php" = "필리핀 페소";
+"currency_vnd" = "베트남 동";
+"currency_aed" = "아랍에미리트 디르함";
+"currency_sar" = "사우디 리얄";
+"currency_kwd" = "쿠웨이트 디나르";
+"currency_bhd" = "바레인 디나르";
+"currency_sek" = "스웨덴 크로나";
+"currency_nok" = "노르웨이 크로네";
+"currency_dkk" = "덴마아크 크로네";
+"currency_rub" = "러시아 루블";
+"currency_xof" = "씨에프에이 프랑";
+
+// MARK: - Legacy Currency Names
+"currency_ats" = "오스트리아 실링";
+"currency_bef" = "벨기에 프랑";
+"currency_dem" = "독일 마르크";
+"currency_esp" = "스페인 페세타";
+"currency_fim" = "핀란드 마르카";
+"currency_frf" = "프랑스 프랑";
+"currency_itl" = "이태리 리라";
+"currency_nlg" = "네델란드 길더";
+
+// MARK: - Test Messages
+"offline_test" = "오프라인 테스트";

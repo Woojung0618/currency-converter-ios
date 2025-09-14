@@ -1,0 +1,62 @@
+/* 
+  Localizable.strings (English)
+  Currency Converter App
+*/
+
+// MARK: - General UI
+"search" = "Search";
+"currency" = "Currency";
+"offline" = "Offline";
+"online" = "Online";
+"information" = "Information";
+
+// MARK: - Exchange Rate Messages
+"offline_status" = "Offline status.";
+"online_status" = "Online status.\nDaily updated exchange rate information is applied.\n(Based on Korea Exim Bank exchange rates)";
+"offline_message" = "Offline status.\nCalculations are based on previous exchange rate information.";
+"timeout_message" = "Server response timeout. Using previous exchange rate information.";
+"connection_error" = "Cannot connect to server. Using previous exchange rate information.";
+"fetch_error" = "Cannot load exchange rate information. Using previous exchange rate information.";
+"invalid_url" = "Invalid URL.";
+
+// MARK: - Currency Names (English)
+"currency_krw" = "South Korean Won";
+"currency_usd" = "US Dollar";
+"currency_eur" = "Euro";
+"currency_jpy" = "Japanese Yen";
+"currency_cny" = "Chinese Yuan";
+"currency_gbp" = "British Pound";
+"currency_hkd" = "Hong Kong Dollar";
+"currency_sgd" = "Singapore Dollar";
+"currency_aud" = "Australian Dollar";
+"currency_cad" = "Canadian Dollar";
+"currency_chf" = "Swiss Franc";
+"currency_nzd" = "New Zealand Dollar";
+"currency_twd" = "New Taiwan Dollar";
+"currency_thb" = "Thai Baht";
+"currency_myr" = "Malaysian Ringgit";
+"currency_idr" = "Indonesian Rupiah";
+"currency_php" = "Philippine Peso";
+"currency_vnd" = "Vietnamese Dong";
+"currency_aed" = "UAE Dirham";
+"currency_sar" = "Saudi Riyal";
+"currency_kwd" = "Kuwaiti Dinar";
+"currency_bhd" = "Bahraini Dinar";
+"currency_sek" = "Swedish Krona";
+"currency_nok" = "Norwegian Krone";
+"currency_dkk" = "Danish Krone";
+"currency_rub" = "Russian Ruble";
+"currency_xof" = "CFA Franc";
+
+// MARK: - Legacy Currency Names
+"currency_ats" = "Austrian Schilling";
+"currency_bef" = "Belgian Franc";
+"currency_dem" = "German Mark";
+"currency_esp" = "Spanish Peseta";
+"currency_fim" = "Finnish Markka";
+"currency_frf" = "French Franc";
+"currency_itl" = "Italian Lira";
+"currency_nlg" = "Dutch Guilder";
+
+// MARK: - Test Messages
+"offline_test" = "Offline Test";

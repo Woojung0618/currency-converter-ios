@@ -248,7 +248,7 @@ struct ContentView: View {
                         /*
                         #if DEBUG
                         VStack(spacing: 4) {
-                            Button("오프라인 테스트") {
+                            Button(NSLocalizedString("offline_test", comment: "")) {
                                 exchangeRateService.simulateOfflineMode()
                             }
                             .font(.caption2)

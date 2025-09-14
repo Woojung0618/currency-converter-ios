@@ -56,7 +56,7 @@ class ExchangeRateService: ObservableObject {
         
         // S3 객체 URL에서 환율 데이터 가져오기
         guard let url = URL(string: s3URL) else {
-            handleError("잘못된 URL입니다.")
+            handleError(NSLocalizedString("invalid_url", comment: ""))
             return
         }
         
@@ -283,20 +283,20 @@ class ExchangeRateService: ObservableObject {
             if let urlError = error as? URLError {
                 switch urlError.code {
                 case .notConnectedToInternet, .networkConnectionLost:
-                    errorMessage = "오프라인 상태입니다.\n이전 환율 정보 기반으로 계산됩니다."
+                    errorMessage = NSLocalizedString("offline_message", comment: "")
                     isOfflineMode = true
                 case .timedOut:
-                    errorMessage = "서버 응답 시간 초과. 이전 환율 정보를 사용합니다."
+                    errorMessage = NSLocalizedString("timeout_message", comment: "")
                     isOfflineMode = false
                 case .cannotFindHost, .cannotConnectToHost:
-                    errorMessage = "서버에 연결할 수 없습니다. 이전 환율 정보를 사용합니다."
+                    errorMessage = NSLocalizedString("connection_error", comment: "")
                     isOfflineMode = false
                 default:
-                    errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+                    errorMessage = NSLocalizedString("fetch_error", comment: "")
                     isOfflineMode = false
                 }
             } else {
-                errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+                errorMessage = NSLocalizedString("fetch_error", comment: "")
                 isOfflineMode = false
             }
             
@@ -406,7 +406,7 @@ class ExchangeRateService: ObservableObject {
         // 2초 후 오프라인 상태 시뮬레이션
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.isLoading = false
-            self.errorMessage = "오프라인 상태입니다.\n이전 환율 정보 기반으로 계산됩니다."
+            self.errorMessage = NSLocalizedString("offline_message", comment: "")
             self.isOffline = true
             
             // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
@@ -427,7 +427,7 @@ class ExchangeRateService: ObservableObject {
         // 2초 후 API 오류 시뮬레이션
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             self.isLoading = false
-            self.errorMessage = "환율 정보를 불러올 수 없습니다. 이전 환율 정보를 사용합니다."
+            self.errorMessage = NSLocalizedString("fetch_error", comment: "")
             self.isOffline = false
             
             // 저장된 환율 데이터가 있으면 사용, 없으면 기본값 사용
@@ -441,9 +441,9 @@ class ExchangeRateService: ObservableObject {
     
     func getInfoMessage() -> String {
         if isOffline {
-            return "오프라인 상태입니다."
+            return NSLocalizedString("offline_status", comment: "")
         } else {
-            return "온라인 상태입니다.\n일일 업데이트 환율 정보가 적용됩니다.\n(한국수출입 은행 환율 기준)"
+            return NSLocalizedString("online_status", comment: "")
         }
     }
 }
